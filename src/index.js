@@ -95,7 +95,7 @@ function PeerServer(options = {}, callback) {
   };
 
   let path = options.path;
-  const port = options.port;
+  const port = process.env.PORT;
 
   if (path[0] !== '/') {
     path = '/' + path;
