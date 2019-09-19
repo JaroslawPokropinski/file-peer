@@ -1,20 +1,12 @@
 {
-  "name": "peer",
-  "version": "0.2.1",
-  "description": "PeerJS server component",
+  "name": "peerjs-server",
+  "version": "0.0.1",
+  "description": "PeerJS server",
   "main": "server.js",
-  "bin": { "peerjs": "./bin/peerjs" },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "restify": "~2.3.5",
-    "ws": "~0.4.25",
-    "optimist": "*"
-  },
-  "devDependencies": {
-    "expect.js": "*",
-    "sinon": "*",
-    "mocha": "*"
+    "peer": "^0.2.10"
   },
   "engines": {
     "node": ">=0.8"
