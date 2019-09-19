@@ -95,7 +95,7 @@ function PeerServer(options = {}, callback) {
   };
 
   let path = options.path;
-  const port = process.env.PORT;
+  const port = options.port;
 
   if (path[0] !== '/') {
     path = '/' + path;
@@ -113,7 +113,9 @@ function PeerServer(options = {}, callback) {
   } else {
     server = http.createServer(app);
   }
-
+  console.log(
+    `port: ${options.port}, key: ${options.key}, herokuport: ${process.env.PORT}`
+  );
   const peerjs = ExpressPeerServer(server, options);
   app.use(peerjs);
 
