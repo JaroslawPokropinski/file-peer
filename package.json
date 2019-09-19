@@ -6,6 +6,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.17.1",
     "peer": "https://github.com/peers/peerjs-server.git"
   },
   "engines": {
