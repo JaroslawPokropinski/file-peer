@@ -1,36 +1,26 @@
 {
   "name": "peer",
-  "version": "0.3.0",
+  "version": "0.2.1",
   "description": "PeerJS server component",
-  "main": "src/index.js",
-  "bin": {
-    "peerjs": "./bin/peerjs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/peers/peerjs-server.git"
-  },
-  "author": "Michelle Bu, Eric Zhang",
+  "main": "server.js",
+  "bin": { "peerjs": "./bin/peerjs" },
+  "author": "",
   "license": "MIT",
-  "scripts": {
-    "test": "eslint . && mocha \"test/**/*.js\"",
-    "start": "bin/peerjs --port ${PORT} --key peerjs"
-  },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "~2.8.4",
-    "express": "^4.17.1",
-    "optimist": "~0.6.1",
-    "ws": "^7.1.2"
+    "restify": "~2.3.5",
+    "ws": "~0.4.25",
+    "optimist": "*"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^6.2.1",
-    "mocha": "^6.2.0",
-    "semistandard": "^14.0.1",
-    "sinon": "^7.4.1"
+    "expect.js": "*",
+    "sinon": "*",
+    "mocha": "*"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=0.8"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha test"
   }
 }
