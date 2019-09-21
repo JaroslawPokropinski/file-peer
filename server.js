@@ -5,6 +5,7 @@ const http = require('http');
 const https = require('https');
 const cors = require('cors');
 const ExpressPeerServer = require('peer').ExpressPeerServer;
+const moment = require('moment');
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 let users = new Map();
-app.put('/user', (req, res, next) => {
+app.put('/users', (req, res, next) => {
   if (!req.body.id || !req.body.name) {
     next('Bad parameters!');
     return;
@@ -32,6 +33,37 @@ app.get('/users', (req, res) => {
     re.push(user);
   }
   res.send(re);
+});
+
+let mockFiles = [
+  {
+    owner: 'jarek',
+    ownerId: '',
+    name: 'file.txt',
+    guid: '6e45724b-fb77-4c5f-b06b-edd5128a0236',
+    date: moment.utc().format(),
+    valid: false,
+  },
+];
+let files = mockFiles;
+
+app.get('/files', (req, res) => {
+  res.send(files);
+});
+
+app.post('/files', (req, res) => {
+  // TODO: validate and authorize
+  let file = req.body;
+  if (!users.has(file.owner)) {
+    console.log(`User ${file.owner} is logged out`);
+    res.status(400).send();
+    return
+  }
+  file.valid = true;
+  file.date = moment.utc().format();
+  file.ownerId = users.get(file.owner);
+  files.push(file);
+  res.send();
 });
 //
 
@@ -63,3 +95,16 @@ const peerjs = ExpressPeerServer(server, options);
 app.use(peerjs);
 
 server.listen(options.port);
+
+peerjs.on('connection', (client) => {
+  console.log(`Client ${client.id} connected`);
+});
+
+peerjs.on('disconnect', (client) => {
+  console.log(`Client ${client.id} disconnected`);
+  files.forEach((file) => {
+    if (file.ownerId === client.id) {
+      file.valid = false;
+    }
+  });
+});
