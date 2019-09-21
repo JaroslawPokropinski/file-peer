@@ -41,12 +41,13 @@ let mockFiles = [
     owner: 'jarek',
     ownerId: '',
     name: 'file.txt',
-    guid: '6e45724b-fb77-4c5f-b06b-edd5128a0236',
+    id: '6e45724b-fb77-4c5f-b06b-edd5128a0236',
     date: moment.utc().format(),
     valid: false,
+    size: '40',
   },
 ];
-let files = mockFiles;
+let files = [];
 
 app.get('/files', (req, res) => {
   res.send(files);
