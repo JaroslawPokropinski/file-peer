@@ -17,11 +17,6 @@ app.get('/app/*', (_req, res) => {
   res.sendFile(path.join(__dirname + '/react/index.html'));
 });
 
-// var MongoDBStore = require('connect-mongodb-session')(session);
-// var store = new MongoDBStore({
-//   uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
-//   collection: 'mySessions',
-// });
 const DBStore = process.env.PROD
   ? require('connect-pg-simple')(session)
   : require('connect-mongodb-session')(session)
@@ -44,7 +39,17 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+if (process.env.PROD) {
+  app.use(
+    cors({
+      origin: 'https://https://file-peer.herokuapp.com/',
+      credentials: true,
+    })
+  );
+} else {
+  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+}
+
 app.use('/api', api);
 
 const options = {
