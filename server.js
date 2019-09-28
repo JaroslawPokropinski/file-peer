@@ -1,73 +1,51 @@
 const express = require('express');
+const path = require('path');
+const session = require('express-session');
+// var MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 
 const http = require('http');
 const https = require('https');
 const cors = require('cors');
 const ExpressPeerServer = require('peer').ExpressPeerServer;
-const moment = require('moment');
+const { router: api, onConnect, onDisconnect } = require('./routes/api');
 
 const app = express();
+app.use(express.static(path.join(__dirname, 'react')));
+
+app.get('/app/*', (_req, res) => {
+  res.sendFile(path.join(__dirname + '/react/index.html'));
+});
+
+// var MongoDBStore = require('connect-mongodb-session')(session);
+// var store = new MongoDBStore({
+//   uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+//   collection: 'mySessions',
+// });
+const DBStore = process.env.PROD
+  ? require('connect-pg-simple')(session)
+  : require('connect-mongodb-session')(session)
+  ;
+
+const store = process.env.PROD
+  ? new DBStore()
+  : new DBStore({
+      uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+      collection: 'mySessions',
+    });
+
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET || 'shhhh! its a secret1',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+    store,
+  })
+);
 app.use(bodyParser.json());
-app.use(cors());
-
-app.use(express.static('react'));
-// Express configuration
-app.get('/', (req, res) => {
-  res.send('Hello world!');
-});
-
-let users = new Map();
-app.put('/users', (req, res, next) => {
-  if (!req.body.id || !req.body.name) {
-    next('Bad parameters!');
-    return;
-  }
-  users.set(req.body.name, req.body.id);
-  console.log(`${req.body.name} connected`);
-  res.send();
-});
-
-app.get('/users', (req, res) => {
-  let re = [];
-  for (let user of users.keys()) {
-    re.push(user);
-  }
-  res.send(re);
-});
-
-let mockFiles = [
-  {
-    owner: 'jarek',
-    ownerId: '',
-    name: 'file.txt',
-    id: '6e45724b-fb77-4c5f-b06b-edd5128a0236',
-    date: moment.utc().format(),
-    valid: false,
-    size: '40',
-  },
-];
-let files = [];
-
-app.get('/files', (req, res) => {
-  res.send(files);
-});
-
-app.post('/files', (req, res) => {
-  // TODO: validate and authorize
-  let file = req.body;
-  if (!users.has(file.owner)) {
-    console.log(`User ${file.owner} is logged out`);
-    res.status(400).send();
-    return
-  }
-  file.valid = true;
-  file.date = moment.utc().format();
-  file.ownerId = users.get(file.owner);
-  files.push(file);
-  res.send();
-});
-//
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use('/api', api);
 
 const options = {
   port: process.env.PORT || 9000,
@@ -98,15 +76,6 @@ app.use(peerjs);
 
 server.listen(options.port);
 
-peerjs.on('connection', (client) => {
-  console.log(`Client ${client.id} connected`);
-});
+peerjs.on('connection', onConnect);
 
-peerjs.on('disconnect', (client) => {
-  console.log(`Client ${client.id} disconnected`);
-  files.forEach((file) => {
-    if (file.ownerId === client.id) {
-      file.valid = false;
-    }
-  });
-});
+peerjs.on('disconnect', onDisconnect);
