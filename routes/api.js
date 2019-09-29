@@ -142,12 +142,11 @@ router.post('/files', (req, res) => {
   let file = req.body;
   if (!users.has(file.owner)) {
     console.log(`User ${file.owner} is logged out`);
-    res.status(400).send(`User ${file.owner} is logged out`);
-    return;
+    return res.status(400).send(`User ${file.owner} is logged out`);
   }
   file.valid = true;
   file.date = moment.utc().format();
-  file.ownerId = users.get(file.owner.id);
+  file.ownerId = users.get(file.owner).id;
   rooms.get(req.session.roomId).files.push(file);
   res.send();
 });

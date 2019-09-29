@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 if (process.env.PROD) {
   app.use(
     cors({
-      origin: 'https://https://file-peer.herokuapp.com/',
+      origin: 'https://file-peer.herokuapp.com/',
       credentials: true,
     })
   );
