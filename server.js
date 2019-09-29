@@ -18,12 +18,14 @@ app.get('/app/*', (_req, res) => {
 });
 
 const DBStore = process.env.PROD
-  ? require('connect-pg-simple')(session)
+  ? require('connect-session-sequelize')(session.Store)
   : require('connect-mongodb-session')(session)
   ;
 
 const store = process.env.PROD
-  ? new DBStore()
+  ? new DBStore({
+    db: require('./config/dbConfig')
+  })
   : new DBStore({
       uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
       collection: 'mySessions',
