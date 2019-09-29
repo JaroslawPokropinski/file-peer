@@ -107,6 +107,11 @@ router.post('/rooms/join', (req, res) => {
   res.send();
 });
 
+router.post('/rooms/leave', (req, res) => {
+  req.session.roomId = undefined;
+  res.send();
+});
+
 // let mockFiles = [
 //   {
 //     owner: 'jarek',
