@@ -40,6 +40,11 @@ app.use(
     store,
   })
 );
+
+if (process.env.PROD) {
+  store.sync();
+}
+
 app.use(bodyParser.json());
 if (process.env.PROD) {
   app.use(
