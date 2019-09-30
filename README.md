@@ -1,22 +1,18 @@
-# PeerServer for Heroku
-
-forked from [peers/peerjs-server](https://github.com/peers/peerjs-server)
+# Webapp for peer to peer file sharing
 
 ## Usage
 
 ```bash
-$ git clone https://github.com/atskimura/peerjs-server-heroku
-$ cd peerjs-server-heroku
-$ heroku create <APP_NAME>
-$ heroku labs:enable websockets
-$ git push heroku master
+$ git clone https://github.com/JaroslawPokropinski/file-peer
+$ cd file-peer
+$ cd react
+$ npm i
+$ parcel build index.html
+$ cd ..
+$ npm i
+$ npm start
 ```
 
 ## Demo
 
-* https://peerjs-examples.herokuapp.com
-* https://github.com/atskimura/peerjs-examples-heroku
-
-## For more information about PeerServer
-
-See: [peers/peerjs-server](https://github.com/peers/peerjs-server)
+* https://file-peer.herokuapp.com
