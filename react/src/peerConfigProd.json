@@ -1,0 +1,8 @@
+{
+  "host": "file-peer.herokuapp.com",
+  "path": "/myapp",
+  "port": 443,
+  "secure": true,
+  "key": "peerjs",
+  "debug": 0
+}

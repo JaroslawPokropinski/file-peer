@@ -11,10 +11,13 @@ const ExpressPeerServer = require('peer').ExpressPeerServer;
 const { router: api, onConnect, onDisconnect } = require('./routes/api');
 
 const app = express();
-app.use(express.static(path.join(__dirname, 'react')));
 
+app.use(express.static(path.join(__dirname, 'react/dist')));
+app.get('/', (_req, res) => {
+  res.redirect('/app');
+});
 app.get('/app/*', (_req, res) => {
-  res.sendFile(path.join(__dirname + '/react/index.html'));
+  res.sendFile(path.join(__dirname + '/react/dist/index.html'));
 });
 
 const DBStore = process.env.PROD

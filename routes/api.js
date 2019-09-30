@@ -78,7 +78,6 @@ router.get('/users', (req, res) => {
 class Room {
   constructor() {
     this.id = uuidv1();
-    // this.url = encodeURIComponent();
     this.files = [];
   }
 }

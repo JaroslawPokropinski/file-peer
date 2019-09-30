@@ -1,0 +1,16 @@
+:root {
+
+  --background-color: #2b2e4a;
+  --primary-color: #c05c7e;
+  --secondary-color: #f3826f;
+  --secondary-color2: #ffb961;
+}
+
+.App {
+  text-align: center;
+}
+
+html {
+  background-color: var(--background-color);
+  height: 100%;
+}
