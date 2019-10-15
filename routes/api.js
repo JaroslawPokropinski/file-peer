@@ -57,16 +57,6 @@ router.post('/logout', (req, res, next) => {
   });
 });
 
-// router.put('/users', (req, res) => {
-//   if (!req.body.id || !req.session.name) {
-//     res.status(400).send('Bad parameters!');
-//     return;
-//   }
-//   users.set(req.session.name, req.body.id);
-//   console.log(`${req.session.name} set id ${req.body.id}`);
-//   res.send();
-// });
-
 router.get('/users', (req, res) => {
   let re = [];
   for (let user of users.keys()) {
@@ -124,7 +114,6 @@ router.get('/files', (req, res) => {
 });
 
 const sendFilesInfo = async (req, res) => {
-  console.log(res)
   if (
     req.session.roomId !== undefined &&
     req.session.roomId !== null &&
