@@ -17,7 +17,7 @@ app.get('/', (_req, res) => {
 });
 app.use(express.static(path.join(__dirname, 'react/dist')));
 
-app.get('/app', (_req, res) => {
+app.get(['/app', '/app/*'], (_req, res) => {
   res.sendFile(path.join(__dirname + '/react/dist/index.html'));
 });
 
