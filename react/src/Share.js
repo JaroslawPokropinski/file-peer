@@ -44,6 +44,7 @@ class Share extends React.Component {
   constructor(props) {
     super(props);
     this.interval = null;
+    this.eventSource = null;
     this.state = {
       fetching: false,
       peer: null,
@@ -59,8 +60,12 @@ class Share extends React.Component {
       return;
     }
 
-    this.fetchFilesInfo();
-    this.interval = setInterval(this.fetchFilesInfo, 2000);
+    this.eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/files/stream`, { withCredentials: true });
+    this.eventSource.onmessage = (e) => {
+      const files = JSON.parse(e.data);
+      this.setState({ files, fetching: false });
+      this.el.scrollIntoView(false, { behavior: 'smooth' });
+    }
     const peer = this.props.store.peer;
 
     peer.on('connection', (conn) => {
@@ -96,6 +101,9 @@ class Share extends React.Component {
   componentWillUnmount() {
     if (this.interval !== null) {
       clearInterval(this.interval);
+    }
+    if (this.eventSource !== null) {
+      this.eventSource.close()
     }
   }
 

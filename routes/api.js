@@ -111,18 +111,6 @@ router.post('/rooms/leave', (req, res) => {
   res.send();
 });
 
-// let mockFiles = [
-//   {
-//     owner: 'jarek',
-//     ownerId: '',
-//     name: 'file.txt',
-//     id: '6e45724b-fb77-4c5f-b06b-edd5128a0236',
-//     date: moment.utc().format(),
-//     valid: false,
-//     size: '40',
-//   },
-// ];
-let files = [];
 
 router.get('/files', (req, res) => {
   if (
@@ -133,6 +121,28 @@ router.get('/files', (req, res) => {
     return res.send(rooms.get(req.session.roomId).files);
   }
   res.send([]);
+});
+
+const sendFilesInfo = async (req, res) => {
+  console.log(res)
+  if (
+    req.session.roomId !== undefined &&
+    req.session.roomId !== null &&
+    rooms.has(req.session.roomId)
+  ) {
+    return res.write(`data: ${JSON.stringify(rooms.get(req.session.roomId).files)}\n\n`);
+  }
+  res.write(`data: ${JSON.stringify([])}\n\n`);
+}
+
+router.get('/files/stream', (req, res) => {
+  res.status(200).set({
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+  });
+  sendFilesInfo(req, res);
+  setInterval(() => sendFilesInfo(req, res), 1000);
 });
 
 router.post('/files', (req, res) => {
@@ -161,11 +171,14 @@ const onConnect = (client) => {
 
 const onDisconnect = (client) => {
   console.log(`Client ${client.id} disconnected`);
-  files.forEach((file) => {
-    if (file.ownerId === client.id) {
-      file.valid = false;
-    }
+  rooms.forEach((key, val) => {
+    val.files.forEach((file) => {
+      if (file.ownerId === client.id) {
+        file.valid = false;
+      }
+    });
   });
+
 };
 
 module.exports = { router, onConnect, onDisconnect };

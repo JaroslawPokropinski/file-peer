@@ -1,9 +1,9 @@
 {
   "name": "peerjs-server",
-  "version": "0.0.1",
-  "description": "PeerJS server",
+  "version": "1.0.0",
+  "description": "PeerJS server for file sharing",
   "main": "server.js",
-  "author": "",
+  "author": "JaroslawPokropinski",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",

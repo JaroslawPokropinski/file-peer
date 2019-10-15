@@ -46313,6 +46313,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Share).call(this, props));
     _this.interval = null;
+    _this.eventSource = null;
     _this.state = {
       fetching: false,
       peer: null,
@@ -46334,8 +46335,23 @@ function (_React$Component) {
         return;
       }
 
-      this.fetchFilesInfo();
-      this.interval = setInterval(this.fetchFilesInfo, 2000);
+      this.eventSource = new EventSource("".concat("http://localhost:9000/api", "/files/stream"), {
+        withCredentials: true
+      });
+
+      this.eventSource.onmessage = function (e) {
+        var files = JSON.parse(e.data);
+
+        _this2.setState({
+          files: files,
+          fetching: false
+        });
+
+        _this2.el.scrollIntoView(false, {
+          behavior: 'smooth'
+        });
+      };
+
       var peer = this.props.store.peer;
       peer.on('connection', function (conn) {
         // send requested file
@@ -46381,6 +46397,10 @@ function (_React$Component) {
     value: function componentWillUnmount() {
       if (this.interval !== null) {
         clearInterval(this.interval);
+      }
+
+      if (this.eventSource !== null) {
+        this.eventSource.close();
       }
     }
   }, {
@@ -47281,7 +47301,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60170" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60615" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -14,9 +14,9 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'react/dist')));
 app.get('/', (_req, res) => {
-  res.redirect('/app');
+  res.redirect('/app/');
 });
-app.get('/app/*', (_req, res) => {
+app.get('/app', (_req, res) => {
   res.sendFile(path.join(__dirname + '/react/dist/index.html'));
 });
 
@@ -30,9 +30,9 @@ const store = process.env.PROD
     db: require('./config/dbConfig')
   })
   : new DBStore({
-      uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
-      collection: 'mySessions',
-    });
+    uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+    collection: 'mySessions',
+  });
 
 app.use(
   session({
