@@ -2,7 +2,8 @@
   "name": "front",
   "version": "1.0.0",
   "description": "PeerJS client for file sharing",
-  "main": "src/index.html",
+  "main": "dist/index.html",
+  "source": "src/index.html",
   "scripts": {
     "start": "parcel -p 3000 src/index.html",
     "build": "parcel build src/index.html",
