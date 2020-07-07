@@ -44,6 +44,11 @@ function App() {
             exact
             render={(props) => <RoomSelect {...props} store={state} />}
           />
+          <Route
+            path={`/share2`}
+            exact
+            render={(props) => <ShareComponent {...props} store={state} />}
+          />
         </Switch>
       </Router>
     </Container>

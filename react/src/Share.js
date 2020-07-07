@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from './axiosConfig';
 import styled from 'styled-components';
-import uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import autobind from 'class-autobind';
 
 import PostList from './PostList';

@@ -7,7 +7,7 @@ $ git clone https://github.com/JaroslawPokropinski/file-peer
 $ cd file-peer
 $ cd react
 $ npm i
-$ parcel build index.html
+$ npm run build
 $ cd ..
 $ npm i
 $ npm start

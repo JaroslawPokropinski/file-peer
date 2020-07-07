@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import humanFileSize from './humanBytes';
-import downloadImg from './download.png';
+import downloadImg from 'url:./download.png';
 
 const List = styled.ul`
   text-align: left;
